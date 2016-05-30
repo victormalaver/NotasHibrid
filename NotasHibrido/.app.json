@@ -3,14 +3,6 @@
   "views": [
     {
       "type": "kendo-ui-mobile:view",
-      "name": "home",
-      "components": [],
-      "title": "Home View",
-      "addToNavigation": true,
-      "icon": "home"
-    },
-    {
-      "type": "kendo-ui-mobile:view",
       "name": "inicio",
       "components": [
         {
@@ -20,14 +12,14 @@
           "emailLabel": "Email",
           "passwordLabel": "Password",
           "signinLabel": "Sign In",
-          "signinRedirect": "home",
+          "signinRedirect": "expocision",
           "enableRegistration": true,
           "gotoRegisterLabel": "Register",
           "registerEmailLabel": "Email",
           "registerPasswordLabel": "Password",
           "registerNameLabel": "Name",
           "registerLabel": "Register",
-          "registerRedirect": "home",
+          "registerRedirect": "expocision",
           "gotoSigninLabel": "Sign In",
           "enableLogout": true,
           "logoutLabel": "Sign Out",
@@ -84,7 +76,26 @@
                   "name": "tipo",
                   "title": "Tipo",
                   "inputType": "shortText",
-                  "dataBindingOptional": "Tipo"
+                  "dataBindingOptional": "Tipo",
+                  "components": [
+                    {
+                      "type": "kendo-ui-mobile:editableList",
+                      "listExtraFields": [],
+                      "detailExtraFields": [],
+                      "components": [],
+                      "name": "tipoModel",
+                      "dataProvider": "notasHibrido",
+                      "collection": "Tipo",
+                      "headerField": "Tipo",
+                      "pullToRefresh": false,
+                      "endlessScroll": false,
+                      "deleteItemButton": false,
+                      "detailHeaderFieldSource": "static",
+                      "detailHeaderFieldValue": "Detail",
+                      "addItemForm": false,
+                      "editItemForm": false
+                    }
+                  ]
                 },
                 {
                   "type": "kendo-ui-mobile:editableListFormField",
@@ -114,7 +125,26 @@
                   "name": "categoria",
                   "title": "Categoria",
                   "inputType": "checkbox",
-                  "dataBinding": "Categoria"
+                  "dataBinding": "Categoria",
+                  "components": [
+                    {
+                      "type": "kendo-ui-mobile:editableList",
+                      "listExtraFields": [],
+                      "detailExtraFields": [],
+                      "components": [],
+                      "name": "categoriaModel",
+                      "dataProvider": "notasHibrido",
+                      "collection": "Categoria",
+                      "headerField": "Categoria",
+                      "pullToRefresh": false,
+                      "endlessScroll": false,
+                      "deleteItemButton": false,
+                      "detailHeaderFieldSource": "static",
+                      "detailHeaderFieldValue": "Detail",
+                      "addItemForm": false,
+                      "editItemForm": false
+                    }
+                  ]
                 },
                 {
                   "type": "kendo-ui-mobile:editableListFormField",
@@ -197,6 +227,22 @@
       "title": "Notas",
       "addToNavigation": true,
       "icon": "edit"
+    },
+    {
+      "type": "kendo-ui-mobile:view",
+      "name": "categoria",
+      "components": [],
+      "title": "Categorias",
+      "addToNavigation": true,
+      "icon": "organize"
+    },
+    {
+      "type": "kendo-ui-mobile:view",
+      "name": "tipo",
+      "components": [],
+      "title": "Tipo",
+      "addToNavigation": true,
+      "icon": "organize"
     }
   ],
   "dataProviders": [
@@ -211,7 +257,7 @@
   ],
   "name": "kendoUiMobileApp",
   "navigation": "drawer",
-  "view": "home",
+  "view": "inicio",
   "skin": "nova",
   "skinMainColor": "#32364c",
   "skinTextColor": "#ffffff",

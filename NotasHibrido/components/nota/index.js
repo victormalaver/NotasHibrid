@@ -1,17 +1,17 @@
 'use strict';
 
 app.nota = kendo.observable({
-    onShow: function() {},
-    afterShow: function() {}
+    onShow: function () {},
+    afterShow: function () {}
 });
 
 // START_CUSTOM_CODE_nota
 // Add custom code here. For more information about custom code, see http://docs.telerik.com/platform/screenbuilder/troubleshooting/how-to-keep-custom-code-changes
 
 // END_CUSTOM_CODE_nota
-(function(parent) {
+(function (parent) {
     var dataProvider = app.data.notasHibrido,
-        fetchFilteredData = function(paramFilter, searchFilter) {
+        fetchFilteredData = function (paramFilter, searchFilter) {
             var model = parent.get('notaModel'),
                 dataSource = model.get('dataSource');
 
@@ -32,9 +32,9 @@ app.nota = kendo.observable({
                 dataSource.filter({});
             }
         },
-        flattenLocationProperties = function(dataItem) {
+        flattenLocationProperties = function (dataItem) {
             var propName, propValue,
-                isLocation = function(value) {
+                isLocation = function (value) {
                     return propValue && typeof propValue === 'object' &&
                         propValue.longitude && propValue.latitude;
                 };
@@ -56,7 +56,7 @@ app.nota = kendo.observable({
                 typeName: 'Nota',
                 dataProvider: dataProvider
             },
-            change: function(e) {
+            change: function (e) {
                 var data = this.data();
                 for (var i = 0; i < data.length; i++) {
                     var dataItem = data[i];
@@ -64,7 +64,7 @@ app.nota = kendo.observable({
                     flattenLocationProperties(dataItem);
                 }
             },
-            error: function(e) {
+            error: function (e) {
                 if (e.xhr) {
                     alert(JSON.stringify(e.xhr));
                 }
@@ -81,7 +81,7 @@ app.nota = kendo.observable({
                             defaultValue: ''
                         },
                     },
-                    icon: function() {
+                    icon: function () {
                         var i = 'globe';
                         return kendo.format('km-icon km-{0}', i);
                     }
@@ -95,7 +95,7 @@ app.nota = kendo.observable({
         dataSource = new kendo.data.DataSource(dataSourceOptions),
         notaModel = kendo.observable({
             dataSource: dataSource,
-            searchChange: function(e) {
+            searchChange: function (e) {
                 var searchVal = e.target.value,
                     searchFilter;
 
@@ -108,25 +108,25 @@ app.nota = kendo.observable({
                 }
                 fetchFilteredData(notaModel.get('paramFilter'), searchFilter);
             },
-            itemClick: function(e) {
+            itemClick: function (e) {
 
                 app.mobileApp.navigate('#components/nota/details.html?uid=' + e.dataItem.uid);
 
             },
-            addClick: function() {
+            addClick: function () {
                 app.mobileApp.navigate('#components/nota/add.html');
             },
-            editClick: function() {
+            editClick: function () {
                 var uid = this.currentItem.uid;
                 app.mobileApp.navigate('#components/nota/edit.html?uid=' + uid);
             },
-            deleteClick: function() {
+            deleteClick: function () {
                 var dataSource = notaModel.get('dataSource'),
                     that = this;
 
                 if (!navigator.notification) {
                     navigator.notification = {
-                        confirm: function(message, callback) {
+                        confirm: function (message, callback) {
                             callback(window.confirm(message) ? 1 : 2);
                         }
                     };
@@ -134,17 +134,17 @@ app.nota = kendo.observable({
 
                 navigator.notification.confirm(
                     "Are you sure you want to delete this item?",
-                    function(index) {
+                    function (index) {
                         //'OK' is index 1
                         //'Cancel' - index 2
                         if (index === 1) {
                             dataSource.remove(that.currentItem);
 
-                            dataSource.one('sync', function() {
+                            dataSource.one('sync', function () {
                                 app.mobileApp.navigate('#:back');
                             });
 
-                            dataSource.one('error', function() {
+                            dataSource.one('error', function () {
                                 dataSource.cancelChanges();
                             });
 
@@ -154,7 +154,7 @@ app.nota = kendo.observable({
                     '', ["OK", "Cancel"]
                 );
             },
-            detailsShow: function(e) {
+            detailsShow: function (e) {
                 var item = e.view.params.uid,
                     dataSource = notaModel.get('dataSource'),
                     itemModel = dataSource.getByUid(item);
@@ -170,15 +170,26 @@ app.nota = kendo.observable({
         });
 
     parent.set('addItemViewModel', kendo.observable({
-        onShow: function(e) {
+        onShow: function (e) {
             // Reset the form data.
             this.set('addFormData', {
                 tipo: '',
                 categoria: '',
                 nota: '',
             });
+            //cargamos ds categoria
+            var dsCategoria = app.categoria.categoriaModel.dataSource;
+            dsCategoria.fetch(function () {
+                var html = []
+                var data = dsCategoria.data();
+                for (var i = 0; i < data.length; i++) {
+                    html.push('<label class="km-listview-label"><span>'+data[i].Categoria+'</span><input data-role="switch" type="checkbox" class="km-widget km-icon km-check"></label>');
+                }
+                $("#listCategorias").html(html);
+            });
+
         },
-        onSaveClick: function(e) {
+        onSaveClick: function (e) {
             var addFormData = this.get('addFormData'),
                 dataSource = notaModel.get('dataSource');
 
@@ -188,7 +199,7 @@ app.nota = kendo.observable({
                 Nota: addFormData.nota,
             });
 
-            dataSource.one('change', function(e) {
+            dataSource.one('change', function (e) {
                 app.mobileApp.navigate('#:back');
             });
 
@@ -197,7 +208,7 @@ app.nota = kendo.observable({
     }));
 
     parent.set('editItemViewModel', kendo.observable({
-        onShow: function(e) {
+        onShow: function (e) {
             var itemUid = e.view.params.uid,
                 dataSource = notaModel.get('dataSource'),
                 itemData = dataSource.getByUid(itemUid);
@@ -209,7 +220,7 @@ app.nota = kendo.observable({
                 nota: itemData.Nota,
             });
         },
-        onSaveClick: function(e) {
+        onSaveClick: function (e) {
             var editFormData = this.get('editFormData'),
                 itemData = this.get('itemData'),
                 dataSource = notaModel.get('dataSource');
@@ -219,11 +230,11 @@ app.nota = kendo.observable({
             itemData.set('Categoria', editFormData.categoria);
             itemData.set('Nota', editFormData.nota);
 
-            dataSource.one('sync', function(e) {
+            dataSource.one('sync', function (e) {
                 app.mobileApp.navigate('#:back');
             });
 
-            dataSource.one('error', function() {
+            dataSource.one('error', function () {
                 dataSource.cancelChanges(itemData);
             });
 
@@ -239,7 +250,7 @@ app.nota = kendo.observable({
         parent.set('notaModel', notaModel);
     }
 
-    parent.set('onShow', function(e) {
+    parent.set('onShow', function (e) {
         var param = e.view.params.filter ? JSON.parse(e.view.params.filter) : null;
 
         fetchFilteredData(param);

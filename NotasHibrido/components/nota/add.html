@@ -12,38 +12,56 @@
         <form>
             <ul class="form-content" data-role="listview" data-style="inset">
                 <li class="form-content-item">
-
                     <label>
 
                         <span>Nota</span>
 
                         <input id="nota" data-bind="value: addFormData.nota" placeholder="Escriba aquí una nota de la exposición ..." type="text">
                     </label>
-
                 </li>
+                <li>
+                    <textarea data-bind="value: textareaValue" class="k-textbox"></textarea>
+                </li>
+               
                 <li class="form-content-item">
-
                     <label>
 
                         <span>Categoria</span>
 
                         <input id="categoria" data-bind="value: addFormData.categoria" type="checkbox">
                     </label>
-
                 </li>
                 <li class="form-content-item">
-
                     <label>
 
                         <span>Tipo</span>
 
                         <input id="tipo" data-bind="value: addFormData.tipo" data-role="switch">
                     </label>
-
                 </li>
             </ul>
         </form>
         <!-- START_CUSTOM_CODE_editableListForm20 -->
         <!-- END_CUSTOM_CODE_editableListForm20 -->
+        <div class="action-buttons">
+            <a data-role="button" class="km-justified km-primary km-large" data-rel="modalview" href="#modalview-categoria" id="modalview-open-button">Login</a>
+        </div>
+    </div>
+</div>
+<div data-role="modalview" id="modalview-categoria" style="width: 90%;">
+    <div data-role="header">
+        <div data-role="navbar">
+            <span>Categorías</span>
+            <a onclick="closeModal('modalview-categoria')" data-role="button" data-align="right">Cancel</a>
+        </div>
+    </div>
+    <ul data-role="listview" data-style="inset">
+        <li id="listCategorias" class="form-content-item"></li>
+    </ul>
+    <div data-role="footer">
+        <div data-role="navbar">
+            <a onclick="closeModal('modalview-categoria')" id="modalview-categoria-button" type="button" data-role="button" data-align="right">Cancelar</a>
+            <a data-click="closeModalViewLogin" id="modalview-reg-button" type="button" data-role="button" data-align="right">Aceptar</a>
+        </div>
     </div>
 </div>

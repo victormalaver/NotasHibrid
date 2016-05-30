@@ -12,8 +12,8 @@ app.inicio = kendo.observable({
 (function(parent) {
     var provider = app.data.notasHibrido,
         mode = 'signin',
-        registerRedirect = 'home',
-        signinRedirect = 'home',
+        registerRedirect = 'expocision',
+        signinRedirect = 'expocision',
         init = function(error) {
             if (error) {
                 if (error.message) {
