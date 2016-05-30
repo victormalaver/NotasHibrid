@@ -187,6 +187,16 @@ app.nota = kendo.observable({
                 }
                 $("#listCategorias").html(html);
             });
+            //cargamos ds tipo
+            var dsTipo = app.tipo.tipoModel.dataSource;
+            dsTipo.fetch(function () {
+                var html = []
+                var data = dsTipo.data();
+                for (var i = 0; i < data.length; i++) {
+                    html.push('<label class="km-listview-label"><span>'+data[i].Tipo+'</span><input data-role="switch" type="checkbox" class="km-widget km-icon km-check"></label>');
+                }
+                $("#listTipos").html(html);
+            });
 
         },
         onSaveClick: function (e) {
