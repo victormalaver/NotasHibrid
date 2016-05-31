@@ -38,7 +38,22 @@
           "type": "kendo-ui-mobile:editableList",
           "listExtraFields": [],
           "detailExtraFields": [],
-          "components": [],
+          "components": [
+            {
+              "type": "kendo-ui-mobile:editableListForm",
+              "components": [
+                {
+                  "type": "kendo-ui-mobile:editableListFormField",
+                  "name": "resumen",
+                  "title": "Long text",
+                  "inputType": "longText",
+                  "dataBindingOptional": "Resumen"
+                }
+              ],
+              "name": "editableListForm24",
+              "formType": "detail"
+            }
+          ],
           "name": "expocisionModel",
           "dataProvider": "notasHibrido",
           "collection": "Exposicion",
@@ -49,8 +64,10 @@
           "pullToRefresh": false,
           "endlessScroll": false,
           "deleteItemButton": false,
-          "detailHeaderFieldSource": "static",
-          "detailHeaderFieldValue": "Detail",
+          "detailHeaderFieldSource": "dataBound",
+          "detailHeaderField": "Fecha",
+          "detailSubHeaderField": "Tema",
+          "detailDescriptionField": "Lugar",
           "addItemForm": false,
           "editItemForm": false
         }

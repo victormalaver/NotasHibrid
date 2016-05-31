@@ -1,8 +1,12 @@
 'use strict';
 
+var idExposicion;
 app.nota = kendo.observable({
     onShow: function () {},
-    afterShow: function () {}
+    afterShow: function (e) {
+        idExposicion = JSON.parse(e.view.params.filter);
+        idExposicion = idExposicion.value;
+    }
 });
 
 // START_CUSTOM_CODE_nota
@@ -54,7 +58,28 @@ app.nota = kendo.observable({
             type: 'everlive',
             transport: {
                 typeName: 'Nota',
-                dataProvider: dataProvider
+                dataProvider: dataProvider,
+                read: {
+                    headers: {
+                        "X-Everlive-Expand": JSON.stringify({
+                            "Categoria": {
+                                "TargetTypeName": "Categoria",
+                                "ReturnAs": "CategoriaExpanded",
+                                "SingleField": "Categoria"
+                            },
+                            "Tipo": {
+                                "TargetTypeName": "Tipo",
+                                "ReturnAs": "TipoExpanded",
+                                "SingleField": "Tipo"
+                            },
+                            "Users": {
+                                "TargetTypeName": "Users",
+                                "ReturnAs": "UsersExpanded",
+                                "SingleField": "DisplayName"
+                            }
+                        })
+                    }
+                }
             },
             change: function (e) {
                 var data = this.data();
@@ -183,7 +208,7 @@ app.nota = kendo.observable({
                 var html = []
                 var data = dsCategoria.data();
                 for (var i = 0; i < data.length; i++) {
-                    html.push('<label class="km-listview-label"><span>'+data[i].Categoria+'</span><input data-role="switch" type="checkbox" class="km-widget km-icon km-check"></label>');
+                    html.push('<label class="km-listview-label"><span>' + data[i].Categoria + '</span><input name="inputCategorias" value="' + data[i].Id + '" data-role="switch" type="checkbox" class="km-widget km-icon km-check"></label>');
                 }
                 $("#listCategorias").html(html);
             });
@@ -193,20 +218,40 @@ app.nota = kendo.observable({
                 var html = []
                 var data = dsTipo.data();
                 for (var i = 0; i < data.length; i++) {
-                    html.push('<label class="km-listview-label"><span>'+data[i].Tipo+'</span><input data-role="switch" type="checkbox" class="km-widget km-icon km-check"></label>');
+                    html.push('<label class="km-listview-label"><span>' + data[i].Tipo + '</span><input name="inputTipos" value="' + data[i].Id + '" data-role="switch" type="checkbox" class="km-widget km-icon km-check"></label>');
                 }
                 $("#listTipos").html(html);
             });
 
         },
         onSaveClick: function (e) {
+            var Categorias = [];
+            $("input[name='inputCategorias']").each(function (index) {
+                var Id = $(this).attr("value");
+                if ($(this).is(':checked')) {
+                    Categorias.push(Id);
+                }
+            });
+
+            var Tipos = [];
+            $("input[name='inputTipos']").each(function (index) {
+                var Id = $(this).attr("value");
+                if ($(this).is(':checked')) {
+                    Tipos.push(Id);
+                }
+            });
+
             var addFormData = this.get('addFormData'),
                 dataSource = notaModel.get('dataSource');
 
             dataSource.add({
-                Tipo: addFormData.tipo,
-                Categoria: addFormData.categoria,
+                // Tipo: addFormData.tipo,
+                Tipo: Tipos,
+                // Categoria: addFormData.categoria,
+                Categoria: Categorias,
                 Nota: addFormData.nota,
+                Exposicion: idExposicion,
+                Users: $("#DisplayName").attr("type")
             });
 
             dataSource.one('change', function (e) {
@@ -214,6 +259,8 @@ app.nota = kendo.observable({
             });
 
             dataSource.sync();
+            
+            console.log(dataSource);
         }
     }));
 
@@ -262,7 +309,6 @@ app.nota = kendo.observable({
 
     parent.set('onShow', function (e) {
         var param = e.view.params.filter ? JSON.parse(e.view.params.filter) : null;
-
         fetchFilteredData(param);
     });
 })(app.nota);
@@ -271,3 +317,28 @@ app.nota = kendo.observable({
 // Add custom code here. For more information about custom code, see http://docs.telerik.com/platform/screenbuilder/troubleshooting/how-to-keep-custom-code-changes
 
 // END_CUSTOM_CODE_notaModel
+
+
+function onCloseModalCategoria(e) {
+    $("#categoria").val();
+    $("input[name='inputCategorias']").each(function (index) {
+        var id = $(this).attr("value");
+        // console.log(id);
+        if ($(this).is(':checked')) {
+            console.log($(this).parent().text());
+            $("#categoria").val($("#categoria").val() + $(this).parent().text() + "  ");
+        }
+    });
+}
+
+function onCloseModalTipo(e) {
+    $("#tipo").val();
+    $("input[name='inputTipos']").each(function (index) {
+        var id = $(this).attr("value");
+        // console.log(id);
+        if ($(this).is(':checked')) {
+            console.log($(this).parent().text());
+            $("#tipo").val($("#tipo").val() + $(this).parent().text() + "  ");
+        }
+    });
+}

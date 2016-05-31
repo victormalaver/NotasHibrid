@@ -45,6 +45,12 @@ app.inicio = kendo.observable({
                     return;
                 }
                 app.user = data.result;
+                
+                if (app.user.principal_id) {
+                    $("#DisplayName").attr('type', app.user.principal_id);
+                } else {
+                    $("#DisplayName").attr('type', app.user.Id);
+                }
 
                 setTimeout(function() {
                     app.mobileApp.navigate('components/' + redirect + '/view.html');

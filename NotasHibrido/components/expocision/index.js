@@ -1,18 +1,17 @@
 'use strict';
 
 app.expocision = kendo.observable({
-    onShow: function () {},
-    afterShow: function () {
-    }
+    onShow: function() {},
+    afterShow: function() {}
 });
 
 // START_CUSTOM_CODE_expocision
 // Add custom code here. For more information about custom code, see http://docs.telerik.com/platform/screenbuilder/troubleshooting/how-to-keep-custom-code-changes
 
 // END_CUSTOM_CODE_expocision
-(function (parent) {
+(function(parent) {
     var dataProvider = app.data.notasHibrido,
-        fetchFilteredData = function (paramFilter, searchFilter) {
+        fetchFilteredData = function(paramFilter, searchFilter) {
             var model = parent.get('expocisionModel'),
                 dataSource = model.get('dataSource');
 
@@ -33,7 +32,7 @@ app.expocision = kendo.observable({
                 dataSource.filter({});
             }
         },
-        processImage = function (img) {
+        processImage = function(img) {
             if (!img) {
                 var empty1x1png = 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVQI12NgYAAAAAMAASDVlMcAAAAASUVORK5CYII=';
                 img = 'data:image/png;base64,' + empty1x1png;
@@ -45,9 +44,9 @@ app.expocision = kendo.observable({
 
             return img;
         },
-        flattenLocationProperties = function (dataItem) {
+        flattenLocationProperties = function(dataItem) {
             var propName, propValue,
-                isLocation = function (value) {
+                isLocation = function(value) {
                     return propValue && typeof propValue === 'object' &&
                         propValue.longitude && propValue.latitude;
                 };
@@ -69,7 +68,7 @@ app.expocision = kendo.observable({
                 typeName: 'Exposicion',
                 dataProvider: dataProvider
             },
-            change: function (e) {
+            change: function(e) {
                 var data = this.data();
                 for (var i = 0; i < data.length; i++) {
                     var dataItem = data[i];
@@ -80,7 +79,7 @@ app.expocision = kendo.observable({
                     flattenLocationProperties(dataItem);
                 }
             },
-            error: function (e) {
+            error: function(e) {
                 if (e.xhr) {
                     alert(JSON.stringify(e.xhr));
                 }
@@ -101,7 +100,7 @@ app.expocision = kendo.observable({
                             defaultValue: ''
                         },
                     },
-                    icon: function () {
+                    icon: function() {
                         var i = 'globe';
                         return kendo.format('km-icon km-{0}', i);
                     }
@@ -112,18 +111,23 @@ app.expocision = kendo.observable({
         dataSource = new kendo.data.DataSource(dataSourceOptions),
         expocisionModel = kendo.observable({
             dataSource: dataSource,
-            itemClick: function (e) {
+            itemClick: function(e) {
 
-                app.mobileApp.navigate('#components/expocision/details.html?uid=' + e.dataItem.uid);
+                // app.mobileApp.navigate('#components/expocision/details.html?uid=' + e.dataItem.uid);
+                app.mobileApp.navigate('#components/nota/view.html?filter=' + encodeURIComponent(JSON.stringify({
+                    field: 'Exposicion',
+                    value: e.dataItem.Id,
+                    operator: 'eq'
+                })));
 
             },
-            detailsShow: function (e) {
+            detailsShow: function(e) {
                 var item = e.view.params.uid,
                     dataSource = expocisionModel.get('dataSource'),
                     itemModel = dataSource.getByUid(item);
 
-                if (!itemModel.Tema) {
-                    itemModel.Tema = String.fromCharCode(160);
+                if (!itemModel.Fecha) {
+                    itemModel.Fecha = String.fromCharCode(160);
                 }
 
                 expocisionModel.set('currentItem', null);
@@ -140,7 +144,7 @@ app.expocision = kendo.observable({
         parent.set('expocisionModel', expocisionModel);
     }
 
-    parent.set('onShow', function (e) {
+    parent.set('onShow', function(e) {
         var param = e.view.params.filter ? JSON.parse(e.view.params.filter) : null;
 
         fetchFilteredData(param);
