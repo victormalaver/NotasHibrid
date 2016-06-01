@@ -30,13 +30,11 @@
     <script type="text/x-kendo-template" id="notaModelTemplate">
         <div class="image-with-text">
             <h3><span class="#: data.icon() #"></span>#: data['Nota'] #</h3>
-            # console.log(data) #
             # for (var i=0 ; i < data[ 'CategoriaExpanded'].length; i++) { #
             	<p>#= CategoriaExpanded[i] #</p>
             # } #
         </div>
         <p class="editableListItem"><span>Tipo</span>
-        	# console.log(data) #
             # for (var i=0 ; i < data[ 'TipoExpanded'].length; i++) { #
                 <span>#= TipoExpanded[i] #</span>
             # } #

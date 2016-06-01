@@ -225,6 +225,9 @@ app.nota = kendo.observable({
 
         },
         onSaveClick: function (e) {
+            console.log(el.users.currentUser);
+            console.log(e.view.params);
+            return;
             var Categorias = [];
             $("input[name='inputCategorias']").each(function (index) {
                 var Id = $(this).attr("value");
@@ -259,8 +262,7 @@ app.nota = kendo.observable({
             });
 
             dataSource.sync();
-            
-            console.log(dataSource);
+            dataSource.read();
         }
     }));
 
